@@ -57,7 +57,7 @@ ROOT_URLCONF = 'devstyle.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -104,7 +104,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -116,12 +115,22 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static'
+# URL to use when referring to static files located in STATIC_ROOT.
+# Ensure it starts and ends with a slash so URL reversing and serving work properly.
+STATIC_URL = '/static/'
+
+# During development your project's static assets live in BASE_DIR / 'static'.
+# Tell Django's staticfiles app to also look there.
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
+
+# Directory where `collectstatic` will collect static files for production.
+# Use a different folder than the source `static/` to avoid conflicts.
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -130,8 +139,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
-
-
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)
@@ -216,5 +223,4 @@ JAZZMIN_SETTINGS = {
 
     # Hide these models when generating side menu (e.g auth.user)
     "hide_models": [],
-
 }
