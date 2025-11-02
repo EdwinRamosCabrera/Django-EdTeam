@@ -53,3 +53,4 @@ def product_detail(request, product_id):
         'categories': categories
     }
     return render(request, '../templates/producto.html', context)
+
