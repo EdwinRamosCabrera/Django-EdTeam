@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 
 class Cart:
@@ -11,15 +12,24 @@ class Cart:
         self.cart = cart
 
     def add(self, product, quantity):
-        self.cart[str(product.id)] = {
-            'product_id': product.id,
-            'name': product.name,
-            'quantity': quantity,
-            'price': str(product.price),
-            'image': product.image.url,
-            'category': product.category.name,
-            'subtotal': str(float(product.price) * quantity)
-        }
+        if str(product.id) not in self.cart.keys():
+            self.cart[str(product.id)] = {
+                'product_id': product.id,
+                'name': product.name,
+                'quantity': quantity,
+                'price': str(product.price),
+                'image': product.image.url,
+                'category': product.category.name,
+                # compute as Decimal, quantize, then convert to string for storage
+                'subtotal': str((Decimal(str(product.price)) * Decimal(str(quantity))).quantize(Decimal('0.01')))
+            }
+        else:
+            # Update quantity and subtotal
+            self.cart[str(product.id)]['quantity'] += quantity
+            # price and quantity stored as strings/numbers — convert to Decimal safely using str()
+            new_subtotal = (Decimal(str(self.cart[str(product.id)]['price'])) * Decimal(str(self.cart[str(product.id)]['quantity']))).quantize(Decimal('0.01'))
+            self.cart[str(product.id)]['subtotal'] = str(new_subtotal)
+        
         self.save()
 
     """ Save changes to shopping cart """
