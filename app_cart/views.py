@@ -26,8 +26,16 @@ def add_to_cart(request, product_id):
 
     return render(request, '../templates/carrito.html')
 
+def delete_product_cart(request, product_id):
+    object_product = Product.objects.get(id=product_id)
+    cart_product = Cart(request)
+    cart_product.delete(object_product)
+    return render(request, '../templates/carrito.html')
+
 def clean_cart(request):
-    pass
+    cart_product = Cart(request)
+    cart_product.clean()
+    return render(request, '../templates/carrito.html')
 
 def register_order(request):
     pass

@@ -37,14 +37,13 @@ class Cart:
         self.session['cart'] = self.cart
         self.session.modified = True
 
-    def remove(self, product):
+    def delete(self, product):
         if str(product.id) in self.cart:
             del self.cart[str(product.id)]
             self.save()
 
+    def clean(self):
+        del self.session['cart']
+
     def get_total_price(self):
         return sum(item['quantity'] * float(item['price']) for item in self.cart.values())
-
-    def clear(self):
-        del self.session['cart']
-        self.save()

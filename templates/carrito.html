@@ -48,7 +48,7 @@ No Space
                         <p class="prod-li-rating-count">12</p>
                     </div>
                     <p class="prod-li-add">
-                        <a href="" class="button hover-label prod-addbtn"><i class="icon ion-close-round"></i><span>Eliminar</span></a>
+                        <a href="{% url 'app_cart:delete_product_cart' value.product_id %}" class="button hover-label prod-addbtn"><i class="icon ion-close-round"></i><span>Eliminar</span></a>
                     </p>
                     <p class="prod-li-information">
                         <a href="#" class="hover-label"><i class="icon ion-more"></i><span>Show Information</span></a>
@@ -79,11 +79,11 @@ No Space
             <input type="submit" class="button" value="Apply">
         </div>
         <div class="cart-collaterals">
-            <a href="#" class="checkout-button button">Limpiar Carrito</a>
+            <a href="{% url 'app_cart:clean_cart' %}" class="checkout-button button">Limpiar Carrito</a>
             <a href="#" class="checkout-button button">Realizar Pedido</a>
             <div class="order-total">
                 <p class="cart-totals-ttl">Total</p>
-                <p class="cart-totals-val">${{request.session.cartMontoTotal}}</p>
+                <p class="cart-totals-val">S/{{request.session.cartMontoTotal}}</p>
             </div>
         </div>
     </div>
