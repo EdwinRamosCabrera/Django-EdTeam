@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from app_products.models import Product
 from . models import Cart
 
@@ -23,6 +23,8 @@ def add_to_cart(request, product_id):
     cart_product.add(object_product, quantity)
     # print(request)
     # print(request.session['cart'])
+    if request.method == 'GET':
+        return redirect('/')
 
     return render(request, '../templates/carrito.html')
 

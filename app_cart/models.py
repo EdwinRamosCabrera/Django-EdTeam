@@ -7,9 +7,12 @@ class Cart:
         self.request = request 
         self.session = request.session
         cart = self.session.get('cart')
+        total_amount = self.session.get('total_amount')
         if not cart:
             cart = self.session['cart'] = {}
+            total_amount = self.session['total_amount'] = "0.00"
         self.cart = cart
+        self.total_amount = float(total_amount)
 
     def add(self, product, quantity):
         if str(product.id) not in self.cart.keys():
@@ -34,7 +37,9 @@ class Cart:
 
     """ Save changes to shopping cart """
     def save(self):
+        total_amount = sum(Decimal(item['subtotal']) for item in self.cart.values())
         self.session['cart'] = self.cart
+        self.session['total_amount'] = str(total_amount.quantize(Decimal('0.01')))
         self.session.modified = True
 
     def delete(self, product):
@@ -44,6 +49,5 @@ class Cart:
 
     def clean(self):
         del self.session['cart']
-
-    def get_total_price(self):
-        return sum(item['quantity'] * float(item['price']) for item in self.cart.values())
+        self.session['total_amount'] = "0.00"
+        self.session.modified = True
