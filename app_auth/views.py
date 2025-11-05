@@ -5,40 +5,61 @@ from django.contrib.auth.models import User
 from .forms import ClientForm
 from .models import Client
 
-# Create your views here.
 
 def login_user(request):
+    context = {}
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
+        userAuth = authenticate(request, username=username, password=password)
+        if userAuth is not None:
+            login(request, userAuth)
             return redirect('/account/')
         else:
-            context = {'messageError': 'Invalid credentials'}
-            print("Invalid credentials")
-            return render(request, '../templates/login.html', context)
-    return render(request, '../templates/login.html')
+            context = {'messageError': 'Datos Incorrectos'}
+            print("Datos Incorrectos")
+            
+    return render(request, '../templates/login.html', context)
 
 def create_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
         password = request.POST.get('password')
-        user = User.objects.create_user(username=username, email=email, password=password)
-        user.save()
-        if user is not None:
-            login(request, user)
+        new_user = User.objects.create_user(username=username, email=email, password=password)
+        # new_user.save()
+        if new_user is not None:
+            login(request, new_user)
             return redirect('/account/')
-    return render(request, '../templates/login.html', {'message': 'Registration successful'})    
+        
+    return render(request, '../templates/login.html')    
 
-def account_view(request):
-    formClient = ClientForm()
+def account_user(request):
+    try:
+        client_edit = Client.objects.get(user=request.user)
+        dataClient = {
+        'first_name': request.user.first_name,
+        'last_name': request.user.last_name,
+        'email': request.user.email,
+        'dni': client_edit.dni,
+        'address': client_edit.address,
+        'phone': client_edit.phone,
+        'gender': client_edit.gender,
+        'birth_date': client_edit.birth_date
+    }
+    except:
+        dataClient = {
+        'first_name': request.user.first_name,
+        'last_name': request.user.last_name,
+        'email': request.user.email,
+    }
+    
+    formClient = ClientForm(dataClient)
     context = {'formClient': formClient}
     return render(request, '../templates/cuenta.html', context)
 
 def account_update(request):
+    message = ''
     if request.method == 'POST':
         formClient = ClientForm(request.POST)
         if formClient.is_valid():
@@ -60,8 +81,8 @@ def account_update(request):
             newClient.save()
 
             message = 'Datos actualizados correctamente'
-            context = {
-                'formClient': formClient, 
-                'message': message
-                }
-            return render(request, '../templates/cuenta.html', context)
+    context = {
+              'message': message,
+              'formClient': formClient
+            }
+    return render(request, '../templates/cuenta.html', context)

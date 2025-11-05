@@ -1,5 +1,8 @@
 from django import forms
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 class ClientForm(forms.Form):
     dni = forms.CharField(max_length=8, label='DNI')
     first_name = forms.CharField(max_length=200, label='Nombre')
@@ -8,4 +11,4 @@ class ClientForm(forms.Form):
     address = forms.CharField(widget=forms.Textarea, label='Dirección')
     phone = forms.CharField(max_length=15, label='Teléfono')
     gender = forms.ChoiceField(choices=[('M', 'Masculino'), ('F', 'Femenino')], label='Género')
-    birth_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), input_formats=['%Y-%m-%d'], label='Fecha de Nacimiento')
+    birth_date = forms.DateField(widget=DateInput(), input_formats=['%Y-%m-%d'], label='Fecha de Nacimiento')

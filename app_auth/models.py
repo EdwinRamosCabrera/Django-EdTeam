@@ -3,10 +3,10 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Client(models.Model):
-    dni = models.CharField(max_length=8, unique=True)
+    dni = models.CharField(max_length=8)
     gender = models.CharField(max_length=1, default='M')
     phone = models.CharField(max_length=15)
-    birth_date = models.DateField(null=True, blank=True)
+    birth_date = models.DateField(null=True)
     address = models.TextField()
     user = models.OneToOneField(User, on_delete=models.RESTRICT)
 
