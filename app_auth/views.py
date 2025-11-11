@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import ClientForm
 from .models import Client
+from django.urls import reverse
+from paypal.standard.forms import PayPalPaymentsForm
 
 def login_user(request):
     landing_page = request.GET.get('next', None)
@@ -125,3 +127,23 @@ def register_order(request):
     formClient = ClientForm(dataClient)
     context = {'formClient': formClient}
     return render(request, '../templates/pedido.html', context)
+
+# Test paypal integration
+
+def view_that_asks_for_money(request):
+    # What you want the button to do.
+    paypal_dict = {
+        "business": "sb-caoi4747409839@business.example.com",
+        "amount": "100.00",
+        "item_name": "producto de prueba de paypal",
+        "invoice": "100-ED100",
+        "notify_url": request.build_absolute_uri(reverse('paypal-ipn')),
+        "return": request.build_absolute_uri('home'),
+        "cancel_return": request.build_absolute_uri('Logout'),
+        "custom": "premium_plan",  # Custom command to correlate to some function later (optional)
+    }
+
+    # Create the instance.
+    form = PayPalPaymentsForm(initial=paypal_dict)
+    context = {"form": form}
+    return render(request, "payment.html", context)
