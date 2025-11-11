@@ -6,7 +6,7 @@ from . models import Cart
 def cart(request):
     return render(request, '../templates/carrito.html')
 
-def add_to_cart(request, product_id):
+def add_product_cart(request, product_id):
     if request.method == 'POST':
         # request.POST is a QueryDict (mapping), not callable. Use get() or []
         # Use get with a default and guard against invalid integers.

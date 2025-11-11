@@ -11,4 +11,4 @@ class ClientForm(forms.Form):
     address = forms.CharField(widget=forms.Textarea, label='Dirección')
     phone = forms.CharField(max_length=15, label='Teléfono')
     gender = forms.ChoiceField(choices=[('M', 'Masculino'), ('F', 'Femenino')], label='Género')
-    birth_date = forms.DateField(widget=DateInput(), input_formats=['%Y-%m-%d'], label='Fecha de Nacimiento')
+    birth_date = forms.DateField(input_formats=['%Y-%m-%d'], widget=DateInput(), label='Fecha de Nacimiento')

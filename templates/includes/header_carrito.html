@@ -1,5 +1,5 @@
 <li class="h-cart">
-    <a class="cart-contents" href="cart.html">
+    <a class="cart-contents" href="{% url 'app_cart:cart' %}">
         <p class="h-cart-icon">
             <i class="ion-android-cart"></i>
             <span>{{ request.session.cart.items|length }}</span>
@@ -13,7 +13,7 @@
                 <li>
                     <a href="{% url 'app_cart:delete_product_cart' value.product_id %}" class="remove">&times;</a>
                     <a href="#">
-                        <img src="{{ value.image }}" alt="">
+                        <img src="{{ value.image }}" alt="{{ value.name }}">
                         {{ value.name }}
                     </a>
                     <span class="quantity">{{ value.quantity }} &times; S/{{ value.subtotal }}</span>
@@ -23,7 +23,7 @@
             <p class="total"><b>Total:</b> S/{{request.session.total_amount}}</p>
             <p class="buttons">
                 <a href="{% url 'app_cart:cart' %}" class="button">Ver Carrito</a>
-                <a href="#" class="button">Pedido</a>
+                <a href="{% url 'app_auth:register_order' %}" class="button">Pedido</a>
             </p>
         </div>
     </div>

@@ -39,7 +39,7 @@ class Cart:
     def save(self):
         total_amount = sum(Decimal(item['subtotal']) for item in self.cart.values())
         self.session['cart'] = self.cart
-        self.session['total_amount'] = str(total_amount.quantize(Decimal('0.01')))
+        self.session['total_amount'] = str(Decimal(total_amount).quantize(Decimal('0.01')))
         self.session.modified = True
 
     def delete(self, product):

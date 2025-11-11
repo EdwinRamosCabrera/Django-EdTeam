@@ -1,25 +1,37 @@
 from xmlrpc import client
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import ClientForm
 from .models import Client
 
-
 def login_user(request):
-    context = {}
+    landing_page = request.GET.get('next', None)
+    context = {
+        'destination': landing_page
+    }
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        userAuth = authenticate(request, username=username, password=password)
+        data_username = request.POST.get('username')
+        data_password = request.POST.get('password')
+        data_destination = request.POST.get('destination')
+        userAuth = authenticate(request, username=data_username, password=data_password)
         if userAuth is not None:
             login(request, userAuth)
+
+            if data_destination != 'None':
+                return redirect(data_destination)
+
             return redirect('/account/')
         else:
             context = {'messageError': 'Datos Incorrectos'}
             print("Datos Incorrectos")
             
     return render(request, '../templates/login.html', context)
+
+def logout_user(request):
+    logout(request)
+    return render(request, '../templates/login.html')
 
 def create_user(request):
     if request.method == 'POST':
@@ -86,3 +98,30 @@ def account_update(request):
               'formClient': formClient
             }
     return render(request, '../templates/cuenta.html', context)
+
+"""Views for  process of buying products"""
+
+@login_required(login_url='/login/')
+def register_order(request):
+    try:
+        client_edit = Client.objects.get(user=request.user)
+        dataClient = {
+        'first_name': request.user.first_name,
+        'last_name': request.user.last_name,
+        'email': request.user.email,
+        'dni': client_edit.dni,
+        'address': client_edit.address,
+        'phone': client_edit.phone,
+        'gender': client_edit.gender,
+        'birth_date': client_edit.birth_date
+    }
+    except:
+        dataClient = {
+        'first_name': request.user.first_name,
+        'last_name': request.user.last_name,
+        'email': request.user.email,
+    }
+    
+    formClient = ClientForm(dataClient)
+    context = {'formClient': formClient}
+    return render(request, '../templates/pedido.html', context)
