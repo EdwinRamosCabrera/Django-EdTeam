@@ -11,31 +11,31 @@
         <article class="prod-li sectls">
             <div class="prod-li-inner">
                 <a href="product.html" class="prod-li-img">
-                    <img src="{{ value.imagen }}" alt="">
+                    <img src="{{ value.image }}" alt="">
                 </a>
                 <div class="prod-li-cont">
                     <div class="prod-li-ttl-wrap">
                         <p>
-                            <a href="#">{{value.categoria}}</a>
+                            <a href="#">{{value.category}}</a>
                         </p>
-                        <h3><a href="product.html">{{ value.nombre }}</a></h3>
+                        <h3><a href="product.html">{{ value.name }}</a></h3>
                     </div><!--
     No Space
     --><div class="prod-li-prices">
                     <div class="prod-li-price-wrap">
                         <p>Precio</p>
-                        <p class="prod-li-price">${{value.precio}}</p>
+                        <p class="prod-li-price">${{value.price}}</p>
                     </div>
                     <div class="prod-li-qnt-wrap">
                         <p class="qnt-wrap prod-li-qnt">
                             <a href="#" class="qnt-plus prod-li-plus"><i class="icon ion-arrow-up-b"></i></a>
-                            <input type="text" value="{{value.cantidad}}">
+                            <input type="text" value="{{value.quantity}}" readonly>
                             <a href="#" class="qnt-minus prod-li-minus"><i class="icon ion-arrow-down-b"></i></a>
                         </p>
                     </div>
                     <div class="prod-li-total-wrap">
                         <p>Total</p>
-                        <p class="prod-li-total">${{value.subtotal}}</p>
+                        <p class="prod-li-total">S/{{value.subtotal}}</p>
                     </div>
                 </div><!--
 No Space
@@ -48,7 +48,7 @@ No Space
                         <p class="prod-li-rating-count">12</p>
                     </div>
                     <p class="prod-li-add">
-                        <a href="{% url 'web:eliminarProductoCarrito' value.producto_id %}" class="button hover-label prod-addbtn"><i class="icon ion-close-round"></i><span>Eliminar</span></a>
+                        <a href="{% url 'app_cart:delete_product_cart' value.product_id %}" class="button hover-label prod-addbtn"><i class="icon ion-close-round"></i><span>Eliminar</span></a>
                     </p>
                     <p class="prod-li-information">
                         <a href="#" class="hover-label"><i class="icon ion-more"></i><span>Show Information</span></a>
@@ -79,11 +79,11 @@ No Space
             <input type="submit" class="button" value="Apply">
         </div>
         <div class="cart-collaterals">
-            <a href="{% url 'web:limpiarCarrito' %}" class="checkout-button button">Limpiar Carrito</a>
-            <a href="{% url 'web:registrarPedido' %}" class="checkout-button button">Realizar Pedido</a>
+            <a href="{% url 'app_cart:clean_cart' %}" class="checkout-button button">Limpiar Carrito</a>
+            <a href="{% url 'app_auth:register_order' %}" class="checkout-button button">Realizar Pedido</a>
             <div class="order-total">
                 <p class="cart-totals-ttl">Total</p>
-                <p class="cart-totals-val">${{request.session.cartMontoTotal}}</p>
+                <p class="cart-totals-val">S/{{request.session.total_amount}}</p>
             </div>
         </div>
     </div>

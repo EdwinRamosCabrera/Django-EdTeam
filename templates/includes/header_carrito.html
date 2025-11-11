@@ -1,29 +1,29 @@
 <li class="h-cart">
-    <a class="cart-contents" href="cart.html">
+    <a class="cart-contents" href="{% url 'app_cart:cart' %}">
         <p class="h-cart-icon">
             <i class="ion-android-cart"></i>
-            <span>1</span>
+            <span>{{ request.session.cart.items|length }}</span>
         </p>
-        <p class="h-cart-total">$100</p>
+        <p class="h-cart-total">S/{{request.session.total_amount}}</p>
     </a>
     <div class="widget_shopping_cart">
         <div class="widget_shopping_cart_content">
             <ul class="cart_list">
-                
+                {% for key, value in request.session.cart.items %}
                 <li>
-                    <a href="#" class="remove">&times;</a>
+                    <a href="{% url 'app_cart:delete_product_cart' value.product_id %}" class="remove">&times;</a>
                     <a href="#">
-                        <img src="https://via.placeholder.com/250" alt="">
-                        Producto
+                        <img src="{{ value.image }}" alt="{{ value.name }}">
+                        {{ value.name }}
                     </a>
-                    <span class="quantity">1 &times; $100</span>
+                    <span class="quantity">{{ value.quantity }} &times; S/{{ value.subtotal }}</span>
                 </li>
-                
+                {% endfor  %}
             </ul>
-            <p class="total"><b>Subtotal:</b> $100</p>
+            <p class="total"><b>Total:</b> S/{{request.session.total_amount}}</p>
             <p class="buttons">
-                <a href="#" class="button">Ver Carrito</a>
-                <a href="#" class="button">Pedido</a>
+                <a href="{% url 'app_cart:cart' %}" class="button">Ver Carrito</a>
+                <a href="{% url 'app_auth:register_order' %}" class="button">Pedido</a>
             </p>
         </div>
     </div>

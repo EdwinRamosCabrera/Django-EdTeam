@@ -22,6 +22,8 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('app_home.urls')),
+    path('', include('app_cart.urls')),
+    path('', include('app_auth.urls')),
 ]
 
 # In development (DEBUG=True) serve media and static files via django.views.static

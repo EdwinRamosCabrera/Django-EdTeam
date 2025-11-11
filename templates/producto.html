@@ -67,17 +67,17 @@
 					<a id="prod-showdesc" class="prod-excerpt-more" href="#">read more</a>
 				</p>
 				<div class="prod-add">
-					<form action="#" method="post">
+					<form action="{% url 'app_cart:add_to_cart' product.id %}" method="post">
 						{% csrf_token %}
 						<div class="variations">
 							<div class="variations-row">
 								<div class="label"><label>Сolor</label></div>
 								<div class="value">
 									<select>
-										<option value="">Choose an option</option>
-										<option value="blue">Blue</option>
-										<option value="green">Green</option>
-										<option value="yellow">Yellow</option>
+										<option value="">Elige una opción</option>
+										<option value="blue">Azul</option>
+										<option value="green">Verde</option>
+										<option value="yellow">Amarillo</option>
 									</select>
 								</div>
 							</div>
@@ -89,7 +89,7 @@
 							<a href="#" class="qnt-plus prod-li-plus"
 								><i class="icon ion-arrow-up-b"></i
 							></a>
-							<input type="text" name="cantidad" value="1" />
+							<input type="text" name="quantity" value="1" />
 							<a href="#" class="qnt-minus prod-li-minus"
 								><i class="icon ion-arrow-down-b"></i
 							></a>
