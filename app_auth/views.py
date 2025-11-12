@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .forms import ClientForm
-from .models import Client
+from .models import Client, Order, OrderDetail
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
 
@@ -127,6 +127,55 @@ def register_order(request):
     formClient = ClientForm(dataClient)
     context = {'formClient': formClient}
     return render(request, '../templates/pedido.html', context)
+
+
+@login_required(login_url='/login/')
+def confirm_order(request):
+    context = {}
+    if request.method == 'POST':
+        # update user info
+        update_user = User.objects.get(id=request.user.id)
+        update_user.first_name = request.POST['first_name']
+        update_user.last_name = request.POST['last_name']
+        update_user.email = request.POST['email']
+        update_user.save()
+        # register or update client info
+        try:
+            client_order = Client.objects.get(user=request.user)
+            client_order.phone = request.POST['phone']
+            client_order.address = request.POST['address']
+            client_order.save()
+        except:
+            client_order = Client()
+            client_order.user = update_user
+            client_order.address = request.POST['address']
+            client_order.phone = request.POST['phone']
+            client_order.save()
+
+        # register new order
+        number_order = ''
+        total_amount = 0.0
+        new_order = Order()
+        new_order.client = client_order
+        new_order.save()
+
+        # update order
+        number_order = f"ORD{new_order.registration_date.strftime('%Y%m%d')}{str(new_order.id).zfill(5)}"
+        new_order.number_order = number_order
+        new_order.amount_total = total_amount
+        new_order.save()
+
+        context = {'order': new_order}
+    return render(request, '../templates/compra.html', context)
+
+
+
+
+
+
+
+
+
 
 # Test paypal integration
 

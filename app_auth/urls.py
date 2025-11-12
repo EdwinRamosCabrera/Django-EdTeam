@@ -10,4 +10,5 @@ urlpatterns = [
     path('account/update/', views.account_update, name='account_update'),
     path('logout/', views.logout_user, name='logout_user'), 
     path('register_order/', views.register_order, name='register_order'),
+    path('confirm_order/', views.confirm_order, name='confirm_order'),
 ]
