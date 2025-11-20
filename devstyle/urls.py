@@ -24,6 +24,7 @@ urlpatterns = [
     path('', include('app_home.urls')),
     path('', include('app_cart.urls')),
     path('', include('app_auth.urls')),
+    path('paypal/', include("paypal.standard.ipn.urls")),
 ]
 
 # In development (DEBUG=True) serve media and static files via django.views.static
