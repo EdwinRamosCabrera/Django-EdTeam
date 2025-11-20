@@ -1,2 +1,3 @@
-# PROYECTO DE DJANGO DE EDTEAM 
-Ecommerce de accesorios para programadores
+# PROYECTO DE DJANGO DE EDTEAM
+
+Proyecto de un Ecommerce de productos
