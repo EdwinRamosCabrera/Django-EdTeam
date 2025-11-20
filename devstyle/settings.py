@@ -145,7 +145,11 @@ MEDIA_URL = '/media/'
 
 PAYPAL_TEST = True
 
-
+# Looking to send emails in production? Check out our Email API/SMTP product!
+EMAIL_HOST = 'sandbox.smtp.mailtrap.io'
+EMAIL_HOST_USER = 'd8b67aff6fc1fd'
+EMAIL_HOST_PASSWORD = '26a0a9015f46a2'
+EMAIL_PORT = '2525'
 
 JAZZMIN_SETTINGS = {
     # title of the window (Will default to current_admin_site.site_title if absent or None)

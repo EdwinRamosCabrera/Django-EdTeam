@@ -10,6 +10,7 @@ from .forms import ClientForm
 from .models import Client, Order, OrderDetail
 from django.urls import reverse
 from paypal.standard.forms import PayPalPaymentsForm
+from django.core.mail import send_mail
 
 def login_user(request):
     landing_page = request.GET.get('next', None)
@@ -24,11 +25,11 @@ def login_user(request):
         if userAuth is not None:
             login(request, userAuth)
 
-            if data_destination != 'None':
-                print(data_destination)
+            if data_destination == 'None' or data_destination == '':
+                print('datos:', data_destination)
+                return redirect('/account/')   
+            else:
                 return redirect(data_destination)
-
-            return redirect('/account/')
         else:
             context = {'messageError': 'Datos Incorrectos'}
             print("Datos Incorrectos")
@@ -181,6 +182,9 @@ def confirm_order(request):
         new_order.amount_total = total_amount
         new_order.save()
 
+        # register session variable for order confirmation
+        request.session['orderId'] = new_order.id
+
         # create button for paypal payment
         paypal_dict = {
         "business": "sb-caoi4747409839@business.example.com",
@@ -206,8 +210,28 @@ def confirm_order(request):
 
     return render(request, '../templates/compra.html', context)
 
+@login_required(login_url='/login/')
 def thanks_order(request):
-    return render(request, '../templates/gracias.html')
+    paypalId = request.GET.get('PayerID', None)
+    context = {}
+    if paypalId is not None:
+        orderId = request.session.get('orderId')
+        order = Order.objects.get(id=orderId)
+        order.status = '1'  # Processing
+        order.save()
+        context = {'order': order}
+
+        send_mail(
+            "GRACIAS POR TU COMPRA",
+            "Tu pedido Nro: {} ha sido procesado con exito.".format(order.number_order),
+            "edwinmrc.12@gmail.com",
+            [request.user.email], # list of emails to send
+            fail_silently=False,
+        )
+
+    else:
+        return redirect('/')
+    return render(request, '../templates/gracias.html', context)
 
 # Test paypal integration
 def view_that_asks_for_money(request):
