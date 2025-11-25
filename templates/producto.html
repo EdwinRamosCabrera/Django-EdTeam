@@ -67,7 +67,7 @@
 					<a id="prod-showdesc" class="prod-excerpt-more" href="#">read more</a>
 				</p>
 				<div class="prod-add">
-					<form action="{% url 'app_cart:add_to_cart' product.id %}" method="post">
+					<form action="{% url 'app_cart:add_product_cart' product.id %}" method="post">
 						{% csrf_token %}
 						<div class="variations">
 							<div class="variations-row">
